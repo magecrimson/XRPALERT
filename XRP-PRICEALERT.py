@@ -71,22 +71,29 @@ def set_volume(val):
         pygame.mixer.music.set_volume(val / 100)
 
 def play_song():
+    global song_stopped
+    song_stopped = False
     if song_path:
         pygame.mixer.init()
         pygame.mixer.music.load(song_path)
         pygame.mixer.music.set_volume(volume_slider.get() / 100)
-        pygame.mixer.music.play()
+        if not song_stopped:
+            pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             time.sleep(1)
     else:
         status_label.config(text="No song selected!")
 
 def stop_song():
+    global song_stopped
+    song_stopped = True
     if pygame.mixer.get_init():
         pygame.mixer.music.stop()
         status_label.config(text="Song stopped!")
 
 def update_price():
+    global song_stopped
+    song_stopped = False
     global last_price
     if 'last_price' not in globals():
         last_price = None
